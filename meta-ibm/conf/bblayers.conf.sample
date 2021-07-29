@@ -15,6 +15,7 @@ BBLAYERS ?= " \
   ##OEROOT##/meta-security \
   ##OEROOT##/meta-phosphor \
   ##OEROOT##/meta-aspeed \
+  ##OEROOT##/meta-microwatt \
   ##OEROOT##/meta-openpower \
   ##OEROOT##/meta-ibm \
   "
@@ -28,6 +29,7 @@ BBLAYERS_NON_REMOVABLE ?= " \
   ##OEROOT##/meta-security \
   ##OEROOT##/meta-phosphor \
   ##OEROOT##/meta-aspeed \
+  ##OEROOT##/meta-microwatt \
   ##OEROOT##/meta-openpower \
   ##OEROOT##/meta-ibm \
   "
