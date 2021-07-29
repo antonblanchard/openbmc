@@ -2,9 +2,11 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
 
 PACKAGECONFIG:append:p10bmc = " host-dump-transport-pldm"
 PACKAGECONFIG:append:witherspoon-tacoma = " host-dump-transport-pldm"
+PACKAGECONFIG:append:witherspoon-microwatt = " host-dump-transport-pldm"
 
 PACKAGECONFIG:append:p10bmc = " openpower-dumps-extension"
 PACKAGECONFIG:append:witherspoon-tacoma = " openpower-dumps-extension"
+PACKAGECONFIG:append:witherspoon-microwatt = " openpower-dumps-extension"
 
 install_ibm_plugins() {
     install ${S}/tools/dreport.d/ibm.d/plugins.d/* ${D}${dreport_plugin_dir}/

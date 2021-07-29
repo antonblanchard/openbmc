@@ -62,3 +62,8 @@ EXTRA_OECONF:append:witherspoon-tacoma = " --enable-concurrent-servers"
 do_install:append:witherspoon-tacoma() {
         install_concurrent_console_config
 }
+
+# What should we do for witherspoon-microwatt?
+# The witherspoon console is ttyS1 on witherspoon-microwatt.
+# Witherspoon looks to create a symlink, so do we need some systemd config?
+# lrwxrwxrwx    1 root     root             5 Feb 22  2021 /dev/ttyVUART0 -> ttyS5

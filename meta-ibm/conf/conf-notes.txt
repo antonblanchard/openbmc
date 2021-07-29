@@ -10,3 +10,5 @@ witherspoon:
 MACHINE=witherspoon bitbake obmc-phosphor-image
 witherspoon-tacoma:
 MACHINE=witherspoon-tacoma bitbake obmc-phosphor-image
+witherspoon-microwatt:
+MACHINE=witherspoon-microwatt bitbake obmc-phosphor-image

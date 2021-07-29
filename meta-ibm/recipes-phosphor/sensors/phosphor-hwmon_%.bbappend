@@ -69,6 +69,10 @@ CHIPS:witherspoon-tacoma = " \
                bus@1e78a000/i2c-bus@500/tmp275@4a \
                "
 
+# Need to update
+CHIPS:witherspoon-microwatt = " \
+               "
+
 CHIPS:p10bmc = " \
                bus@1e78a000/i2c-bus@200/power-supply@68 \
                bus@1e78a000/i2c-bus@200/power-supply@69 \

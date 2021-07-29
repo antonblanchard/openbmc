@@ -57,11 +57,11 @@ evb-ast2500             olympus-nuvoton         vegman-n110
 evb-ast2600             on5263m5                vegman-rx20
 evb-npcm750             p10bmc                  vegman-sx20
 f0b                     palmetto                witherspoon
-fp5280g2                quanta-q71l             witherspoon-tacoma
-g220a                   romulus                 x11spi
-gbs                     s2600wf                 yosemitev2
-gsj                     s6q                     zaius
-kudo                    s7106
+fp5280g2                quanta-q71l             witherspoon-microwatt
+g220a                   romulus                 witherspoon-tacoma
+gbs                     s2600wf                 x11spi
+gsj                     s6q                     yosemitev2
+kudo                    s7106                   zaius
 lannister               s8036
 ```
 

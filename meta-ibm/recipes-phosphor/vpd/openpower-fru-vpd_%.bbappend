@@ -15,3 +15,6 @@ do_install:append:witherspoon-tacoma() {
         printf "\nEEPROM=/sys/devices/platform/ahb/ahb:apb/ahb:apb:bus@1e78a000/1e78a600.i2c-bus/i2c-11/11-0051/eeprom" >> ${DEST}/inventory
 }
 
+do_install:append:witherspoon-microwatt() {
+	# Currently empty
+}
