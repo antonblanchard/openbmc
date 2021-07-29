@@ -46,7 +46,6 @@ VIRTUAL-RUNTIME_ipmi-config ?= "phosphor-ipmi-config"
 
 RDEPENDS_${PN}-dev += "phosphor-logging"
 RDEPENDS_${PN}-dev += "phosphor-mapper-dev"
-RDEPENDS_${PN} += "clear-once"
 RDEPENDS_${PN} += "phosphor-network"
 RDEPENDS_${PN} += "phosphor-time-manager"
 RDEPENDS_${PN} += "${VIRTUAL-RUNTIME_ipmi-config}"
