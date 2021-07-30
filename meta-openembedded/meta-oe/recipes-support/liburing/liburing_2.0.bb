@@ -25,7 +25,7 @@ XCFLAGS_append_libc-musl = " -lucontext"
 
 EXTRA_OEMAKE = "'CC=${CC}' 'RANLIB=${RANLIB}' 'AR=${AR}' 'CFLAGS=${CFLAGS} -I${S}/include -DWITHOUT_XATTR' 'LDFLAGS=${LDFLAGS}' 'XCFLAGS=${XCFLAGS}' 'BUILDDIR=${S}'"
 do_configure() {
-    ${S}/configure --prefix=${prefix}
+    ${S}/configure --prefix=${prefix} --libdir=${libdir} --libdevdir=${libdir}
 }
 do_install () {
     oe_runmake install DESTDIR=${D} SBINDIR=${sbindir} MANDIR=${mandir} INCLUDEDIR=${includedir}
