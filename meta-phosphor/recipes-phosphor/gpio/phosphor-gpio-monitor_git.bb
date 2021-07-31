@@ -40,7 +40,7 @@ SYSTEMD_SERVICE_${PN}-presence += "phosphor-gpio-presence@.service"
 FILES_${PN}-monitor += "${bindir}/phosphor-gpio-monitor"
 FILES_${PN}-monitor += "${bindir}/phosphor-multi-gpio-monitor"
 FILES_${PN}-monitor += "${bindir}/phosphor-gpio-util"
-FILES_${PN}-monitor += "${base_libdir}/udev/rules.d/99-gpio-keys.rules"
+FILES_${PN}-monitor += "${nonarch_base_libdir}/udev/rules.d/99-gpio-keys.rules"
 FILES_${PN}-presence += "${bindir}/phosphor-gpio-presence"
 
 SRC_URI += "git://github.com/openbmc/phosphor-gpio-monitor"
