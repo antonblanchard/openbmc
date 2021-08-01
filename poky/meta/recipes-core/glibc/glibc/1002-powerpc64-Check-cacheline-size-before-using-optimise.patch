@@ -1,0 +1,78 @@
+From d8acc086e4ed22ee824d93f256536f3467cd498a Mon Sep 17 00:00:00 2001
+From: Anton Blanchard <anton@ozlabs.org>
+Date: Tue, 6 Jul 2021 06:37:30 +1000
+Subject: [PATCH 2/4] powerpc64: Check cacheline size before using optimised
+ memset routines
+
+A number of optimised memset routines assume the cacheline size is 128B,
+so we better check before using them.
+---
+ .../powerpc/powerpc64/multiarch/ifunc-impl-list.c | 15 +++++++++++----
+ sysdeps/powerpc/powerpc64/multiarch/memset.c      | 12 ++++++++----
+ 2 files changed, 19 insertions(+), 8 deletions(-)
+
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c b/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c
+index 5030793884..2777225567 100644
+--- a/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c
++++ b/sysdeps/powerpc/powerpc64/multiarch/ifunc-impl-list.c
+@@ -35,6 +35,9 @@ __libc_ifunc_impl_list (const char *name, struct libc_ifunc_impl *array,
+ 
+   unsigned long int hwcap = GLRO(dl_hwcap);
+   unsigned long int hwcap2 = GLRO(dl_hwcap2);
++#ifdef SHARED
++  int cacheline_size = GLRO(dl_cache_line_size);
++#endif
+ 
+   /* hwcap contains only the latest supported ISA, the code checks which is
+      and fills the previous supported ones.  */
+@@ -73,13 +76,17 @@ __libc_ifunc_impl_list (const char *name, struct libc_ifunc_impl *array,
+ 
+   /* Support sysdeps/powerpc/powerpc64/multiarch/memset.c.  */
+   IFUNC_IMPL (i, name, memset,
+-	      IFUNC_IMPL_ADD (array, i, memset, hwcap2 & PPC_FEATURE2_ARCH_2_07,
++	      IFUNC_IMPL_ADD (array, i, memset, hwcap2 & PPC_FEATURE2_ARCH_2_07
++			      && cacheline_size == 128,
+ 			      __memset_power8)
+-	      IFUNC_IMPL_ADD (array, i, memset, hwcap & PPC_FEATURE_ARCH_2_06,
++	      IFUNC_IMPL_ADD (array, i, memset, hwcap & PPC_FEATURE_ARCH_2_06
++			      && cacheline_size == 128,
+ 			      __memset_power7)
+-	      IFUNC_IMPL_ADD (array, i, memset, hwcap & PPC_FEATURE_ARCH_2_05,
++	      IFUNC_IMPL_ADD (array, i, memset, hwcap & PPC_FEATURE_ARCH_2_05
++			      && cacheline_size == 128,
+ 			      __memset_power6)
+-	      IFUNC_IMPL_ADD (array, i, memset, hwcap & PPC_FEATURE_POWER4,
++	      IFUNC_IMPL_ADD (array, i, memset, hwcap & PPC_FEATURE_POWER4
++			      && cacheline_size == 128,
+ 			      __memset_power4)
+ 	      IFUNC_IMPL_ADD (array, i, memset, 1, __memset_ppc))
+ 
+diff --git a/sysdeps/powerpc/powerpc64/multiarch/memset.c b/sysdeps/powerpc/powerpc64/multiarch/memset.c
+index d662cc4ae5..372c71e24f 100644
+--- a/sysdeps/powerpc/powerpc64/multiarch/memset.c
++++ b/sysdeps/powerpc/powerpc64/multiarch/memset.c
+@@ -37,13 +37,17 @@ extern __typeof (__redirect_memset) __memset_power8 attribute_hidden;
+ /* Avoid DWARF definition DIE on ifunc symbol so that GDB can handle
+    ifunc symbol properly.  */
+ libc_ifunc (__libc_memset,
+-            (hwcap2 & PPC_FEATURE2_ARCH_2_07)
++            (hwcap2 & PPC_FEATURE2_ARCH_2_07
++	     && GLRO(dl_cache_line_size) == 128)
+             ? __memset_power8 :
+-	      (hwcap & PPC_FEATURE_ARCH_2_06)
++	      (hwcap & PPC_FEATURE_ARCH_2_06
++	       && GLRO(dl_cache_line_size) == 128)
+ 	      ? __memset_power7 :
+-		(hwcap & PPC_FEATURE_ARCH_2_05)
++		(hwcap & PPC_FEATURE_ARCH_2_05
++	         && GLRO(dl_cache_line_size) == 128)
+ 		? __memset_power6 :
+-		  (hwcap & PPC_FEATURE_POWER4)
++		  (hwcap & PPC_FEATURE_POWER4
++	           && GLRO(dl_cache_line_size) == 128)
+ 		  ? __memset_power4
+             : __memset_ppc);
+ 
+-- 
+2.31.1
+

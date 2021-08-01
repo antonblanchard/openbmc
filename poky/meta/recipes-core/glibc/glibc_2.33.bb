@@ -57,6 +57,10 @@ SRC_URI =  "${GLIBC_GIT_URI};branch=${SRCBRANCH};name=glibc \
            file://0029-wordsize.h-Unify-the-header-between-arm-and-aarch64.patch \
            file://0030-powerpc-Do-not-ask-compiler-for-finding-arch.patch \
            file://mte-backports.patch \
+           file://1001-powerpc64-Replace-some-PPC_FEATURE_HAS_VSX-with-PPC_.patch \
+           file://1002-powerpc64-Check-cacheline-size-before-using-optimise.patch \
+           file://1003-powerpc64-Add-checks-for-Altivec-and-VSX-in-ifunc-se.patch \
+           file://1004-Hack-out-float128-support.patch \
            "
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build-${TARGET_SYS}"
