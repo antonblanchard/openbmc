@@ -1,0 +1,94 @@
+From 2ae12dd8df01ed17aff6610dc4ba744fa47d52b3 Mon Sep 17 00:00:00 2001
+From: Anton Blanchard <anton@linux.ibm.com>
+Date: Wed, 3 Aug 2022 11:27:10 +1000
+Subject: [PATCH] Remove hard coded directories
+
+Use meson variables instead of hard coding them. This fixes an issue where
+libraries on a 64 bit target should go into /usr/lib64.
+
+Signed-off-by: Anton Blanchard <anton@linux.ibm.com>
+---
+ meson.build       | 23 +++++++++++++++++------
+ meson_options.txt |  4 ++--
+ 2 files changed, 19 insertions(+), 8 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 402c3a7..d810692 100644
+--- a/meson.build
++++ b/meson.build
+@@ -30,8 +30,19 @@ endif
+ conf_data.set_quoted('CONTROL_HOST_BUSNAME', get_option('control-host-busname'))
+ conf_data.set_quoted('CONTROL_HOST_OBJ_MGR', get_option('control-host-obj-mgr'))
+ conf_data.set_quoted('HOST_NAME', get_option('host-name'))
+-conf_data.set_quoted('POWER_READING_SENSOR', get_option('power-reading-sensor'))
+-conf_data.set_quoted('HOST_IPMI_LIB_PATH', get_option('host-ipmi-lib-path'))
++
++power_reading_sensor = get_option('power-reading-sensor')
++if power_reading_sensor == ''
++  power_reading_sensor = get_option('prefix') / get_option('datadir') / 'ipmi-providers' / 'power_reading.json'
++endif
++
++host_ipmi_lib_path = get_option('host-ipmi-lib-path')
++if host_ipmi_lib_path == ''
++  host_ipmi_lib_path = get_option('prefix') / get_option('libdir') / 'ipmid-providers'
++endif
++
++conf_data.set_quoted('POWER_READING_SENSOR', power_reading_sensor)
++conf_data.set_quoted('HOST_IPMI_LIB_PATH', host_ipmi_lib_path)
+ 
+ conf_h = configure_file(
+   output: 'config.h',
+@@ -144,7 +155,7 @@ if not get_option('ipmi-whitelist').disabled()
+     version: meson.project_version(),
+     override_options: ['b_lundef=false'],
+     install: true,
+-    install_dir: get_option('libdir') / 'ipmid-providers')
++    install_dir: host_ipmi_lib_path)
+ endif
+ 
+ # libsysintfcmds
+@@ -169,7 +180,7 @@ sysintfcmds_lib = library(
+   version: meson.project_version(),
+   override_options: ['b_lundef=false'],
+   install: true,
+-  install_dir: get_option('libdir') / 'ipmid-providers')
++  install_dir: host_ipmi_lib_path)
+ 
+ # ipmid
+ ipmid_pre = [
+@@ -228,7 +239,7 @@ ipmi20_lib = library(
+   dependencies: [ipmid_pre, entity_map_json_dep, nlohmann_json_dep],
+   include_directories: root_inc,
+   install: true,
+-  install_dir: get_option('libdir') / 'ipmid-providers',
++  install_dir: host_ipmi_lib_path,
+   version: meson.project_version(),
+   override_options: ['b_lundef=false'])
+ 
+@@ -262,7 +273,7 @@ if not get_option('dynamic-sensors').disabled()
+     version: meson.project_version(),
+     override_options: ['b_lundef=false'],
+     install: true,
+-    install_dir: get_option('libdir') / 'ipmid-providers')
++    install_dir: host_ipmi_lib_path)
+ endif
+ 
+ if not get_option('tests').disabled()
+diff --git a/meson_options.txt b/meson_options.txt
+index af121c6..67a4cae 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -26,8 +26,8 @@ option('control-host-obj-mgr', type: 'string', value: '/xyz/openbmc_project/cont
+ option('host-name', type: 'string', value: 'host', description: 'The Control Host D-Bus Object Manager')
+ 
+ # Power reading sensor configuration file
+-option('power-reading-sensor', type: 'string', value: '/usr/share/ipmi-providers/power_reading.json', description: 'Power reading sensor configuration file')
+-option('host-ipmi-lib-path', type: 'string', value: '/usr/lib/ipmid-providers/', description: 'The file path to search for libraries')
++option('power-reading-sensor', type: 'string', description: 'Power reading sensor configuration file')
++option('host-ipmi-lib-path', type: 'string', description: 'The file path to search for libraries')
+ 
+ # When a sensor read fails, hwmon will update the OperationalState interface's Functional property.
+ # This will mark the sensor as not functional and we will skip reading from that sensor.
+-- 
+2.37.1
+
