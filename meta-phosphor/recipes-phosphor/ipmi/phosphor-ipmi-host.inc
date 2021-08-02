@@ -1,5 +1,7 @@
 HOMEPAGE = "http://github.com/openbmc/phosphor-host-ipmid"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=fa818a259cbed7ce8bc2a22d35a464fc"
-SRC_URI += "git://github.com/openbmc/phosphor-host-ipmid;branch=master;protocol=https"
+SRC_URI += "git://github.com/openbmc/phosphor-host-ipmid;branch=master;protocol=https \
+            file://0001-Remove-hard-coded-directories.patch \
+            "
 SRCREV = "b53049e86f90a7d0bbe2044922f1a50fe47ad548"
