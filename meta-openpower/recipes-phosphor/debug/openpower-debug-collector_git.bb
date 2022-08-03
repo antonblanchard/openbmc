@@ -16,7 +16,6 @@ DEPENDS += " \
         phosphor-logging \
         ${PYTHON_PN}-sdbus++-native \
         cli11 \
-        ipl \
         "
 S = "${WORKDIR}/git"
 
